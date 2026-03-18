@@ -141,9 +141,26 @@ class WebGPURenderer implements Renderer {
 - Names should be descriptive enough to understand without reading the
   implementation. If a descriptive name would be too long, use a shorter
   name and explain in a docstring.
+- When a value has a unit, suffix variable and function names with it
+  (e.g. `distancePx`, `angleRad`, `getTimeoutMs()`).
 - For files containing a single class, name the file after the class.
 - For files containing multiple exports, use a kebab-case name.
 - Common file names: `index.ts`, `types.ts`, `utils.ts`, `constants.ts`.
+
+| Suffix  | Unit         |
+| ------- | ------------ |
+| `Ms`    | Milliseconds |
+| `Sec`   | Seconds      |
+| `Px`    | Pixels       |
+| `Rem`   | CSS rem      |
+| `Em`    | CSS em       |
+| `Pct`   | Percent      |
+| `Rad`   | Radians      |
+| `Deg`   | Degrees      |
+| `Bytes` | Bytes        |
+| `Kb`    | Kilobytes    |
+| `Mb`    | Megabytes    |
+| `Hz`    | Hertz        |
 
 ```ts
 // Bad
@@ -182,6 +199,14 @@ function calculateTotalPriceIncludingTaxAndShipping(cart: Cart): number {
 function calculateTotal(cart: Cart): number {
 	// ...
 }
+
+// Bad: no unit
+const timeout = 5000;
+function getDistance(a: Vector2, b: Vector2): number { ... }
+
+// Good: unit suffix
+const timeoutMs = 5000;
+function getDistancePx(a: Vector2, b: Vector2): number { ... }
 ```
 
 ## Variables
