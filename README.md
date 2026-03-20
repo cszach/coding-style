@@ -3,3 +3,4 @@
 Zach's Coding Style™ for various programming languages.
 
 - [JavaScript® and TypeScript®](js-ts/)
+- [WebGPU Shading Language](wgsl/)
