@@ -20,7 +20,7 @@
 1. Install dependencies:
 
 ```sh
-npm install -D eslint prettier typescript-eslint eslint-config-prettier
+npm install -D eslint prettier typescript-eslint eslint-config-prettier eslint-plugin-import
 ```
 
 2. Copy [`.prettierrc`](.prettierrc) and [`eslint.config.mjs`](eslint.config.mjs)
@@ -49,7 +49,9 @@ style guide below.
 - Use `===` and `!==` instead of `==` and `!=`.
 - Use double quotes for strings.
 - No thin getters or setters. Expose variables directly with a `@readonly`
-  JSDoc annotation. Exceptions: nested variables or non-obvious names.
+  JSDoc annotation. Exceptions: nested variables or non-obvious names. When
+  in doubt, ask: does this getter do more than forward a single field? If
+  not, it is thin.
 - When a nested property is referenced often, alias it.
 
 ```ts
@@ -66,6 +68,27 @@ class Camera {
 class Camera {
 	/** @readonly */
 	zoom: number = 1;
+}
+
+// Bad: thin getter over a public field
+class Engine {
+	transition: Transition | null = null;
+
+	get isTransitioning(): boolean {
+		return this.transition !== null;
+	}
+}
+
+// Good: compare directly
+if (engine.transition !== null) { ... }
+
+// Good: getter over nested property
+class AtlasManager {
+	private lodResources: LODResource[];
+
+	get textures(): GPUTexture[] {
+		return this.lodResources[0]?.textures ?? [];
+	}
 }
 
 // Bad: repeated nested access
@@ -87,7 +110,7 @@ function updateProfile(app: Application) {
 
 ## TypeScript
 
-- Only use `as` when necessary.
+- Only use `as` when omitting it would cause a TypeScript error.
 - Never use `any`. If no alternative seems possible, rethink the design.
 - Use `type` for type definitions.
 - Use `interface` only to define a contract that classes implement.
@@ -214,6 +237,8 @@ function getDistancePx(a: Vector2, b: Vector2): number { ... }
 - Use `const` and `let`. Never use `var`.
 - Declare variables as close as possible to their first usage.
 - Group variable declarations by purpose, separated by blank lines.
+- When extracting multiple properties from an object, use destructuring
+  assignment.
 
 ```ts
 // Bad: declared far from usage
@@ -236,6 +261,14 @@ function processOrder(order: Order) {
 
 	order.total = order.subtotal + tax + shipping;
 }
+
+// Bad
+const radius = params.radius ?? 0.8;
+const count = params.referenceCount ?? 100;
+const seed = params.seed ?? 0.01;
+
+// Good: destructuring assignment
+const { radius = 0.8, referenceCount = 100, seed = 0.01 } = params;
 ```
 
 ## Functions
@@ -274,6 +307,7 @@ events.forEach((event) => {
   7. Getters
   8. Instance methods
   9. Private instance methods
+  10. Private static methods
 - Within each group, order members logically (by importance or usage flow).
   Separate groups with a blank line.
 - Use `readonly` for variables only assigned in the constructor.
@@ -465,6 +499,8 @@ function connect(url: string) {
 - Only document non-obvious parameters.
 - No separator comments (e.g. `----------`).
 - Use `//` for inline comments and `/** */` for docstrings.
+- When a comment applies to multiple lines, separate it from the code with a
+  blank line. When it applies to a single line, place it directly above.
 - Use `TODO`, `FIXME`, `NOTE`, etc. appropriately. Include your name so the
   contact is traceable (e.g. `TODO(Zach): ...`).
 
@@ -489,6 +525,21 @@ const size = nextPowerOfTwo(image.width);
 function uploadTexture(source: ImageData, format: TextureFormat): WebGLTexture {
 	// ...
 }
+
+// Bad: unclear if the comment applies to one or both lines
+// Convert polar to cartesian coordinates
+const x = radius * Math.cos(angleRad);
+const y = radius * Math.sin(angleRad);
+
+// Good: blank line signals the comment applies to the block
+// Convert polar to cartesian coordinates
+
+const x = radius * Math.cos(angleRad);
+const y = radius * Math.sin(angleRad);
+
+// Good: no blank line signals it applies to the next line only
+// Clamp to viewport bounds
+const clampedX = Math.min(x, viewportWidth);
 
 // TODO(Zach): Investigate memory leak on context loss
 // FIXME(Dana): Off-by-one in tile index calculation
