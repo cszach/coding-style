@@ -40,6 +40,25 @@ npm install -D eslint prettier typescript-eslint eslint-config-prettier eslint-p
 Some rules are not enforceable by tooling and must be followed manually. See the
 style guide below.
 
+### AI coding agent skill
+
+This style guide is available as a skill for AI coding agents. When installed,
+your agent will automatically follow these conventions when writing, reviewing,
+or refactoring JavaScript and TypeScript code.
+
+#### Claude Code
+
+```sh
+# Install for all projects
+ln -s /path/to/coding-style/js-ts ~/.claude/skills/zach-js-ts
+
+# Install for a single project
+ln -s /path/to/coding-style/js-ts .claude/skills/zach-js-ts
+```
+
+Once installed, the skill auto-activates on `.js`, `.jsx`, `.ts`, `.tsx`,
+`.mjs`, and `.cjs` files. You can also invoke it manually with `/zach-js-ts`.
+
 ## General
 
 - Code must fit within 80 columns.

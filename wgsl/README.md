@@ -1,5 +1,6 @@
 # Zach's Coding Style for WebGPU Shading Language
 
+- [Setup](#setup)
 - [General](#general)
 - [File structure](#file-structure)
 - [Naming](#naming)
@@ -8,6 +9,27 @@
 - [Functions](#functions)
 - [Bindings](#bindings)
 - [Comments](#comments)
+
+## Setup
+
+### AI coding agent skill
+
+This style guide is available as a skill for AI coding agents. When installed,
+your agent will automatically follow these conventions when writing, reviewing,
+or refactoring WGSL shader code.
+
+#### Claude Code
+
+```sh
+# Install for all projects
+ln -s /path/to/coding-style/wgsl ~/.claude/skills/zach-wgsl
+
+# Install for a single project
+ln -s /path/to/coding-style/wgsl .claude/skills/zach-wgsl
+```
+
+Once installed, the skill auto-activates on `.wgsl` files. You can also invoke
+it manually with `/zach-wgsl`.
 
 ## General
 
